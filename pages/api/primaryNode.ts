@@ -14,5 +14,11 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<{motherNode: motherNode}>
 ) {
-  res.status(200).json({ motherNode })
+  if(req.method === 'GET') return res.status(200).json({ motherNode })
+  if(req.method === 'POST') {
+    const newNode = req.body.node
+    motherNode.push(newNode)
+    console.log(motherNode);
+    return res.status(200).send({motherNode})
+  }
 }
