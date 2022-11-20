@@ -17,14 +17,14 @@ export default function ChildrenNodeMap({
           return (
             <FolderRenderer
               higherIndex={higherIndex + 1}
-              key={(node as folderNode).folderPath}
+              key={node.elementPath}
               folderNode={node as folderNode}
             />
           );
         return (
           <FileRenderer
             higherIndex={higherIndex + 1}
-            key={(node as fileNode).filePath}
+            key={node.elementPath}
             fileNode={node as fileNode}
           />
         );

@@ -1,21 +1,25 @@
-import { CSSProperties, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setSelectedNode, setShowContextMenu } from '../../feautures/node/nodeSlice';
+import axios from 'axios';
+import Router from 'next/router';
+import { CSSProperties, useContext, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fileNode, folderNode } from '../../d';
+import { setSelectedNode, setShowContextMenu, updateNodeSystem } from '../../feautures/node/nodeSlice';
+import { RootState } from '../../feautures/store';
 import styles from '../../styles/Sidebar.module.scss'
 
-export default function ContextMenu({left, top, nodePath}: {left:string, top: string, nodePath: string}) {
+export default function ContextMenu({nodeElement}: {nodeElement: (fileNode | folderNode)}) {
     const svgRef = useRef() as React.MutableRefObject<any>;
     const contextmenu = useRef() as React.MutableRefObject<HTMLDivElement>;
     const [copyStyles, setCopyStyles] = useState<CSSProperties>({
       opacity: 0
     })
+    const {contextMenu}  = useSelector((state: RootState) => state.motherNode)
     const dispatch = useDispatch()
 
     function windowEvent(e: MouseEvent){
       const el = e.target as HTMLElement
-      console.log(el, el.parentElement);
         if(el != contextmenu.current && (el as HTMLElement)?.parentElement?.parentElement != contextmenu.current && (el as HTMLElement)?.parentElement != contextmenu.current  ){
-          dispatch(setShowContextMenu({show: false, selected: null}))
+          dispatch(setShowContextMenu({show: false, selected: null, toRename: false}))
       
           }
     }
@@ -25,25 +29,37 @@ export default function ContextMenu({left, top, nodePath}: {left:string, top: st
       window.addEventListener('click',windowEvent)
 
         svgRef.current.addEventListener('click', () => {
-          console.log('clicked');
           setCopyStyles({opacity: 1})
-          navigator.clipboard.writeText(nodePath)
+          navigator.clipboard.writeText(nodeElement.elementPath)
           setTimeout(() => {
             setCopyStyles({opacity: 0})
     
         }, 2000)
       })
 
-
-
-
-
         return () => window.removeEventListener('click', windowEvent)
     },[])
 
+    const onClickFns = {
+      rename: () => {
+        dispatch(setShowContextMenu({show: false, toRename: true, selected: contextMenu.selected}))
+
+      },
+      delete: async () => {
+        try {
+          dispatch(setShowContextMenu({show: false, selected: null, toRename: false}))
+          dispatch(setSelectedNode('main'))
+          const resp = await axios.delete(process.env.NEXT_PUBLIC_API_URL + 'node', {params: {node : nodeElement.elementPath}})
+          dispatch(updateNodeSystem(resp.data.motherNode))
+        } catch (error) {
+          console.error(error);
+        }
+      },
+
+    }
   return (
-    <div ref={contextmenu} style={{top: top, left: left}} className={styles.context_menu_wrapper}>
-      <div className={`${styles.option} ${styles.rename}`}>
+    <div ref={contextmenu} style={{top: contextMenu.cords.top, left: contextMenu.cords.left}} className={styles.context_menu_wrapper}>
+      <div onClick={() => onClickFns.rename()} className={`${styles.option} ${styles.rename}`}>
         <svg
           width="18"
           height="18"
@@ -58,7 +74,7 @@ export default function ContextMenu({left, top, nodePath}: {left:string, top: st
         </svg>
         <span>Rename</span>
       </div>
-      <div className={`${styles.option} ${styles.delete}`}>
+      <div onClick={() => onClickFns.delete()} className={`${styles.option} ${styles.delete}`}>
         <svg
           width="21"
           height="20"

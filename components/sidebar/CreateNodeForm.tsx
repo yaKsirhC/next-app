@@ -1,11 +1,11 @@
 import axios from "axios";
-import Router from "next/router";
 import React, {  useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fileNode, folderNode } from "../../d";
-import { updateCreateNode, pushNode } from "../../feautures/node/nodeSlice";
+import { fileNode, folderNode, motherNode } from "../../d";
+import { updateCreateNode, pushNode, updateNodeSystem, setShowContextMenu } from "../../feautures/node/nodeSlice";
 import { RootState } from "../../feautures/store";
 import styles from '../../styles/Sidebar.module.scss'
+import ContextMenu from "./ContextMenu";
 
 export default function CreateNodeForm({
   higherIndex = 0,
@@ -22,16 +22,17 @@ export default function CreateNodeForm({
     try {
       e?.preventDefault()
       if(inputValue.trim().length == 0) return dispatch(updateCreateNode({file: false, folder: false}))
-      const newNodePath = (selectedNode.toCreate).folderPath + '/' + inputValue
+      const newNodePath = (selectedNode.toCreate).elementPath + '/' + inputValue
       const possibleMatch = motherNode.filter(node => {
-          return (node as folderNode).folderPath === newNodePath || (node as fileNode).filePath === newNodePath
+          return node.elementPath === newNodePath
       })
       if(possibleMatch.length > 0) return alert('Node already exists')
       const newNode = createNode.file ? new fileNode(newNodePath, '') : new folderNode(newNodePath)
-      await axios.post(process.env.NEXT_PUBLIC_API_URL + 'primaryNode', {node: newNode})
-      Router.reload()
+      const resp = await axios.post<{motherNode: motherNode}>(process.env.NEXT_PUBLIC_API_URL + 'node', {node: newNode})
+      dispatch(updateCreateNode({file: false, folder: false}))
+      dispatch(updateNodeSystem(resp.data.motherNode))
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -54,7 +55,7 @@ export default function CreateNodeForm({
 
         )
       }
-      <form method="POST" onSubmit={(e) => submitCreateNode(e)}>
+      <form onSubmit={(e) => submitCreateNode(e)}>
         <input autoFocus value={inputValue} onChange={(e) => setInputValue(e.target.value)} type="text" onBlur={() => submitCreateNode()}/>
       </form>
     </div>

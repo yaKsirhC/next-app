@@ -1,8 +1,8 @@
 @import "master";
 
 .sidebar {
-  padding-left: 10px;
-  background-color: $beige-2;
+  background-color: $red-2;
+  border-right: 1px solid $beige-3;
   display: flex;
   flex-direction: column;
 }
@@ -12,13 +12,32 @@
 }
 
 .node_name {
-  user-select: none;
-  padding-block: 1px 1.5px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  user-select: none;
+  font-size: 12px;
+  svg {
+    fill: $gray-2;
+    path{
+      fill: $gray-2;
+      stroke: $gray-2 !important;
+    }
+  }
   &:hover {
-    background-color: $beige-3;
+    background-color: $beige-2;
+  }
+  input{
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding-block: 1px 1.5px;
+    background-color: transparent;
+    border: none;
+    &:focus{
+      outline: none;
+    }
   }
 }
 
@@ -39,8 +58,9 @@
 
 .index_line {
   --higherIndex: 0;
-
+  
   &::before {
+    z-index: 2;
     position: absolute;
     content: "";
     left: calc(var(--higherIndex) * 6px);
@@ -50,6 +70,7 @@
     background-color: black;
   }
 }
+
 
 .node_children {
   position: relative;
@@ -118,24 +139,30 @@
     right: 0;
     border-radius: 1px;
     }
-
-    // .copystyles{
-    //   position: absolute;
-    //   left: 100%;
-    //   top: 100%;
-    //   background-color: rgba(0, 0, 0, 0.382);
-    //   padding: 3px 6px;
-    //   border-radius: 5px;
-    //   color: white;
-    // }
   }
   .option {
+    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 10px;
+    padding: 4px;
+    border-radius: 5px;
+    &:hover{
+      background-color: rgb(237, 237, 237);
+    }
   }
 
   path{
     pointer-events: none;
+  }
+}
+
+.sidebar_footer{
+  display: flex;
+  justify-content: space-around;
+  padding-inline: 5px;
+  margin-bottom: 5px;
+  svg{
+    cursor: pointer;
   }
 }

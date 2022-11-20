@@ -16,7 +16,12 @@ const initialState: nodeState = {
     openFiles: [],
     contextMenu: {
         selected: null,
-        show: false
+        show: false,
+        toRename: false,
+        cords: {
+            top: '',
+            left: ''
+        }
     }
 }
 
@@ -45,8 +50,9 @@ const nodeSlice = createSlice({
             state.createNode = action.payload
         },
         setShowContextMenu: (state, action) => {
-            state.contextMenu = action.payload
-        }
+            state.contextMenu = {...state.contextMenu, ...action.payload}
+        },
+        
     },
 })
 

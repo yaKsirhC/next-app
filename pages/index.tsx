@@ -1,14 +1,16 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.scss'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { motherNode } from '../d'
 import { useEffect } from 'react'
 import { updateNodeSystem } from '../feautures/node/nodeSlice'
 import Sidebar from '../components/sidebar/Sidebar'
-import FileEditor from '../components/sidebar/FileEditor'
+import FileEditors from '../components/file-editing/FileEditors'
+import { RootState } from '../feautures/store'
 
 export default function Home({motherNode}: {motherNode: motherNode}) {
+  const {openFile} = useSelector((state: RootState) => state.editor)
 
   const dispatch = useDispatch()
   useEffect(() => {
@@ -23,14 +25,14 @@ export default function Home({motherNode}: {motherNode: motherNode}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Sidebar/>
-      <FileEditor />
+      <FileEditors />
     </div>
   )
 }
 
 export async function getServerSideProps(){
   try {
-    const motherNode = await axios.get<{motherNode: {motherNode: motherNode}}>(process.env.NEXT_PUBLIC_API_URL + 'primaryNode')
+    const motherNode = await axios.get<{motherNode: {motherNode: motherNode}}>(process.env.NEXT_PUBLIC_API_URL + 'node')
     return {
       props:{
         motherNode: motherNode.data.motherNode
@@ -38,6 +40,6 @@ export async function getServerSideProps(){
     }
     
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }

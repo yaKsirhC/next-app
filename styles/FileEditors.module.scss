@@ -1,0 +1,54 @@
+@import './master';
+
+.file_editor{
+    padding-left: 5px;
+    background-color: $red-1;
+}
+
+.single_editor_wrapper{
+    textarea{
+        background-color: #fff;
+        padding: 5px 0px 0px 10px;
+        outline: none;
+        border: none;
+        resize: none;
+        width: 100% !important;
+        height: 100% !important;
+    }
+    height: 100%;
+    width: 100%;
+    .nav_dot{
+        display: inline-block;
+        background-color: $beige-3;
+        width: 8px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+    }
+    .nav_p{
+        padding-inline: 4px;
+    }
+    .navigation_file{
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        padding-bottom: 4px;
+    }
+}
+.live_HTML_container{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 400px;
+    width: 300px;
+    border: 2px solid rgba(0, 0, 0, 0.324);
+    border-right: none;
+    border-bottom: none;
+    padding: 10px;
+
+    .hot_HTML{
+        *, *::before, *::after{
+            all: revert;
+        }
+    }
+
+}

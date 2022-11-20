@@ -1,10 +1,12 @@
 import { configureStore, Store } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import nodeSlice from "./node/nodeSlice";
+import editor from "./node/editorSlice";
 
 const store = () =>  configureStore({
     reducer:{
-        motherNode: nodeSlice
+        motherNode: nodeSlice,
+        editor: editor
     }
 })
 
