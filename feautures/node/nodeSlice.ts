@@ -13,7 +13,6 @@ const initialState: nodeState = {
         toCreate: {...defaultSelectedNode},
         toSelect: {...defaultSelectedNode}
     },
-    openFiles: [],
     contextMenu: {
         selected: null,
         show: false,
@@ -22,7 +21,9 @@ const initialState: nodeState = {
             top: '',
             left: ''
         }
-    }
+    },
+    openFile: null,
+    tabFiles: [],
 }
 
 const nodeSlice = createSlice({
@@ -52,9 +53,29 @@ const nodeSlice = createSlice({
         setShowContextMenu: (state, action) => {
             state.contextMenu = {...state.contextMenu, ...action.payload}
         },
-        
+        setOpenFile: (state, action) => {
+            state.openFile = action.payload
+            const match = state.tabFiles.findIndex(file => {
+                return file.elementPath === action.payload.elementPath
+            })
+            if(match < 0){
+                state.tabFiles.push(action.payload)
+            }
+
+        },
+        fakeUpdateText: (state, action) => {
+            (state.openFile as fileNode).text = action.payload
+        },
+        closeFile: (state, action) => {
+            const file = action.payload as fileNode
+            const fileIndex = state.tabFiles.findIndex(el => {return el.elementPath ===  file.elementPath})
+            if(file.elementPath === state.openFile?.elementPath){
+                state.openFile = fileIndex -1 >= 0 ? state.tabFiles[fileIndex-1] : fileIndex + 1 <= state.tabFiles.length -1 ? state.tabFiles[fileIndex + 1] : null
+            }
+            state.tabFiles.splice(fileIndex,1)
+        }
     },
 })
 
 export default nodeSlice.reducer
-export const {pushNode,updateNodeSystem,setSelectedNode,updateCreateNode,setShowContextMenu,} = nodeSlice.actions
+export const {pushNode,updateNodeSystem,setSelectedNode,updateCreateNode,setShowContextMenu,closeFile,fakeUpdateText,setOpenFile} = nodeSlice.actions

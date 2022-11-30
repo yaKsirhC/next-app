@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Router from 'next/router';
 import { CSSProperties, useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fileNode, folderNode } from '../../d';

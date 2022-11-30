@@ -4,7 +4,7 @@ import { RootState } from "../../feautures/store";
 import styles from '../../styles/FileEditors.module.scss'
 
 export default function LiveHTML(){
-    const {openFile} = useSelector((state: RootState) => state.editor)
+    const {openFile} = useSelector((state: RootState) => state.motherNode)
     const live = useRef() as React.MutableRefObject<HTMLDivElement>
 
     

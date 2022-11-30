@@ -3,6 +3,21 @@
   margin: 0;
   box-sizing: border-box;
 }
+:root{
+  --beige_1 : rgb(227 216 209);
+  --beige_2 : #CEC8C3;
+  --beige_3 : #d8c3b5;
+  
+  
+  --red_1 : rgba(219, 42, 42, 0.09);
+  --red_2 : rgb(168 154 154 / 20%);
+  --red_3 : rgba(219, 42, 42, 0.197);
+  
+  --gray_2: rgba(58, 59, 74, 0.689);
+
+  --hover_clr: rgba(93, 93, 93, 0.165);
+}
+
 html{
   body{
     height: 100vh;

@@ -1,14 +1,19 @@
-import { useDispatch } from "react-redux";
-import { toggleHotHTML } from "../../feautures/node/editorSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setShowModal } from "../../feautures/node/settingsSlice";
+import { RootState } from "../../feautures/store";
 import styles from "../../styles/Sidebar.module.scss";
+import Settings from "./Settings";
 
 export default function SidebarFooter() {
-
+  const {show} = useSelector((state: RootState) => state.settings)
     const dispatch = useDispatch()
 
   return (
     <div className={styles.sidebar_footer}>
-      <svg onClick={() => dispatch(toggleHotHTML(true))} width="30" height="30" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {
+        show.modal ? <Settings />: undefined
+      }
+      <svg onClick={() => dispatch(setShowModal({modal: true}))} width="30" height="30" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M10 11.25C10.6904 11.25 11.25 10.6904 11.25 10C11.25 9.30964 10.6904 8.75 10 8.75C9.30964 8.75 8.75 9.30964 8.75 10C8.75 10.6904 9.30964 11.25 10 11.25Z"
           fill="#231F20"

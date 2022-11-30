@@ -6,11 +6,8 @@ import CreateNodeForm from "./CreateNodeForm";
 import ChildrenNodeMap from "./ChildNodeMap";
 import { createContext, CSSProperties, FocusEvent, HTMLAttributes, MouseEvent, useState } from "react";
 import { RootState } from "../../feautures/store";
-import { setSelectedNode, setShowContextMenu } from "../../feautures/node/nodeSlice";
-import ContextMenu from "./ContextMenu";
-import Router from "next/router";
+import { setSelectedNode, setShowContextMenu, updateNodeSystem } from "../../feautures/node/nodeSlice";
 import axios from "axios";
-import submitModifyNode from "../../utils/submitModifyChanges";
 
 export const renameActionContextFolder = createContext<any>(null)
 
@@ -43,7 +40,7 @@ export default function FolderRenderer({
     
   const folderNameStyles: CSSProperties = {
     paddingLeft: `${higherIndex * 10}px`,
-    backgroundColor: selectedNode.toSelect.elementPath === folderNode.elementPath ? 'rgb(227 216 209)' : ''
+    backgroundColor: selectedNode.toSelect.elementPath === folderNode.elementPath ? 'var(--hover_clr)' : ''
   }
   
   const folderNameEventListeners: HTMLAttributes<HTMLDivElement> = {
@@ -80,11 +77,11 @@ export default function FolderRenderer({
         ? new fileNodeConstructor(newNodePath, "")
         : new folderNodeConstructor(newNodePath);
 
-    await axios.put(
+    const resp = await axios.put(
       (process.env.NEXT_PUBLIC_API_URL as string) + "/node",
       { newNode: { ...newNode }, oldNode: folderNode }
     );
-    Router.reload();
+    dispatch(updateNodeSystem(resp.data.motherNode))
   } catch (error) {
     console.error(error);
   }

@@ -1,8 +1,7 @@
-@import "master";
 
 .sidebar {
-  background-color: $red-2;
-  border-right: 1px solid $beige-3;
+  background-color: var(--red_2);
+  border-right: 1px solid var(--beige_3);
   display: flex;
   flex-direction: column;
 }
@@ -18,14 +17,14 @@
   user-select: none;
   font-size: 12px;
   svg {
-    fill: $gray-2;
+    fill: var(--gray_2);
     path{
-      fill: $gray-2;
-      stroke: $gray-2 !important;
+      fill: var(--gray_2);
+      stroke: var(--gray_2) !important;
     }
   }
   &:hover {
-    background-color: $beige-2;
+    background-color: var(--beige_2);
   }
   input{
     font-size: 12px;
@@ -158,11 +157,32 @@
 }
 
 .sidebar_footer{
+  position: relative;
   display: flex;
   justify-content: space-around;
   padding-inline: 5px;
   margin-bottom: 5px;
   svg{
     cursor: pointer;
+  }
+  .settings_wrapper{
+    background-color: #fff;
+    padding: 4px;
+    border-radius: 5px;
+    position: absolute;
+    bottom: calc(100% + 5px);
+    .settings{
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      p{
+        padding: 4px;
+        cursor: pointer;
+        font-size: .9em;
+        &:hover{
+          background-color: rgba(93, 93, 93, 0.165);
+        }
+      }
+    }
   }
 }

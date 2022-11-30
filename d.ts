@@ -55,26 +55,46 @@ export interface nodeState {
     toSelect: fileNode | folderNode;
   };
   createNode: createNode;
-  openFiles: fileNode[];
   contextMenu: {
     show: boolean;
     selected: fileNode | folderNode | null;
     toRename: boolean;
     cords: {
       top: string;
-      left: string
-    }
+      left: string;
+    };
   };
-}
-
-export interface editorState {
   openFile: fileNode | null;
   tabFiles: fileNode[];
-  hotHTML: boolean;
 }
 
 export interface keyMap {
   ctrl: boolean;
   shift: boolean;
   key: string;
+}
+
+export interface settingsState {
+  show: {
+    modal: boolean;
+    editor: boolean;
+  };
+  settings: {
+    _v: number;
+    clr_pallete: clr_pallete;
+    fnt: {
+      family: string;
+    };
+  };
+}
+
+export interface clr_pallete {
+  beige_1: string;
+  beige_2: string;
+  beige_3: string;
+  gray_2: string;
+  hover_clr: string;
+  red_1: string;
+  red_2: string;
+  red_3: string;
 }

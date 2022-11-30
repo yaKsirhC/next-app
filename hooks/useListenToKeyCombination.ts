@@ -31,7 +31,12 @@ export default function useListenToKeyCombination(keyMap: keyMap, ref: React.Mut
 
     useEffect(() => {
         ref.current.addEventListener('keydown', handleKeyChanges)
-        return () => ref.current.removeEventListener('keydown', handleKeyChanges)
+        return () => {
+            console.log(ref.current);
+            if(ref.current){
+                ref.current.removeEventListener('keydown', handleKeyChanges)
+            }
+        }
     }, [])
     return didPressCombination
 }

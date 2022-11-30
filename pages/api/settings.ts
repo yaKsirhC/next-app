@@ -1,22 +1,31 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import mysql from 'mysql'
-
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'YOURPASSWORD',
-    database: 'file_editor_DB'
-})
-
-db.connect(err => {
-    if(err){
-        console.error(err);
-    }
-})
+import updateFile from "../../utils/updateFile";
+import settingsFile from '../api/settingsFile.json'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse){
-    if(req.method === 'PUT'){
-        // const scheme = 
-        res.status(200).send({})
+    try {
+        if(req.method === 'GET'){
+            return res.status(200).send(settingsFile)
+        }
+        if(req.method === 'PUT'){
+            const scheme = req.body.scheme
+            const font = req.body.font
+            if(scheme){
+                console.log(settingsFile);
+                settingsFile.settings.clr_pallete = scheme
+            }
+            if(font){
+                console.log(font)
+                settingsFile.settings.fnt = font
+            }
+            settingsFile.settings._v++
+            console.log(settingsFile);
+            updateFile(JSON.stringify(settingsFile),process.env.SETTINGS_FILE_URI as string )
+            return res.status(200).json(settingsFile)
+            
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(400).send(error)
     }
 }

@@ -9,7 +9,7 @@ export default function SettingsFile(){
 
     return(
         <div className={styles.settings}>
-            <div onClick={() => dispatch(setShowModal({file: false}))} className={styles.close_settings}>
+            <div onClick={() => dispatch(setShowModal({editor: false}))} className={styles.close_settings}>
                 X
             </div>
             <div className={styles.color}>

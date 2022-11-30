@@ -21,7 +21,6 @@ export default function Settings(){
             settingsRef.current.style.transform = 'translateY(0)'
             window.addEventListener('click', handleClick)
         },0)
-        console.log('golden');
         return () => {
             window.removeEventListener('click', handleClick)
             clearTimeout(timeout)
@@ -32,7 +31,7 @@ export default function Settings(){
         <div ref={settingsWrapperRef} className={styles.settings_wrapper}>
             <div ref={settingsRef} className={`${styles.settings}`}>
                 {/* @ts-ignore */}
-            <p onClick={() => dispatch(setShowModal({file: true, modal: false}))} style={{'--clr': 'blue'}}>open settings on file editor</p>
+            <p onClick={() => dispatch(setShowModal({editor: true, modal: false}))} style={{'--clr': 'blue'}}>open settings on file editor</p>
             <p>Open Advanced Folder Structure</p>
             </div>
         </div>

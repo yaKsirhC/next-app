@@ -2,7 +2,7 @@ import axios from "axios";
 import { useRef, useState, useLayoutEffect, CSSProperties, FormEvent } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { keyMap, motherNode } from "../../d";
-import { fakeUpdateText } from "../../feautures/node/editorSlice";
+import { fakeUpdateText } from "../../feautures/node/nodeSlice";
 import { updateNodeSystem } from "../../feautures/node/nodeSlice";
 import { RootState } from "../../feautures/store";
 import useListenToKeyCombination from "../../hooks/useListenToKeyCombination";
@@ -10,7 +10,7 @@ import styles from "../../styles/FileEditors.module.scss";
 import LiveHTML from "./LiveHTML";
 
 export default function SingleFileEditor() {
-  const { openFile,hotHTML } = useSelector((state: RootState) => state.editor);
+  const { openFile } = useSelector((state: RootState) => state.motherNode);
   const dispatch = useDispatch();
   const divRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const textRef = useRef() as React.MutableRefObject<HTMLTextAreaElement>;
@@ -80,13 +80,13 @@ export default function SingleFileEditor() {
           value={fileText}
         />
       </div>
-      {
+      {/* {
         fileExt === 'html' && hotHTML ? (
             <LiveHTML />
         )
         :
         undefined
-      }
+      } */}
     </>
   );
 }

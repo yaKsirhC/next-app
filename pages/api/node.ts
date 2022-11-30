@@ -2,7 +2,7 @@
 import motherNodeJSON from './motherNode.json'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { motherNode, fileNode, folderNode } from '../../d'
-import updateMotherNodeJSON from '../../utils/updateMotherNodeJSON';
+import updateFile from '../../utils/updateFile';
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,7 +13,7 @@ export default async function handler(
   if(req.method === 'POST') {
     const newNode = req.body.node
     motherNodeJSON.push(newNode)
-    await updateMotherNodeJSON(motherNodeJSON)
+    await updateFile(JSON.stringify(motherNodeJSON),process.env.JSON_DB_URI as string)
     return res.status(200).send({motherNode: motherNodeJSON})
   }
   if(req.method === 'DELETE'){
@@ -31,7 +31,7 @@ export default async function handler(
     },[]) as unknown as motherNode
     console.log(secondaryNodes);
     if(nodeInd < 0) return res.status(404).send(new Error('node not found'))
-    updateMotherNodeJSON(secondaryNodes)
+    updateFile(JSON.stringify(secondaryNodes),process.env.JSON_DB_URI as string)
     res.status(200).send({motherNode: secondaryNodes })
   }
   if(req.method === 'PUT'){
@@ -51,7 +51,7 @@ export default async function handler(
     }
     // @ts-ignore
     motherNodeJSON.splice(oldNodeInd, 1, newNode)
-    await updateMotherNodeJSON(motherNodeJSON)
+    await updateFile(JSON.stringify(motherNodeJSON),process.env.JSON_DB_URI as string)
     return res.status(200).send({motherNode: motherNodeJSON})
   }
 }

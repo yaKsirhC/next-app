@@ -2,12 +2,12 @@ import style from "../../styles/Sidebar.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { fileNode, folderNode } from "../../d";
 import { fileNode as fileNodeConstructor, folderNode as folderNodeCunstructor } from "../../d";
-import { setSelectedNode, setShowContextMenu, } from "../../feautures/node/nodeSlice";
+import { setSelectedNode, setShowContextMenu, updateNodeSystem, } from "../../feautures/node/nodeSlice";
 import { createContext, CSSProperties, FocusEvent, HTMLAttributes, MouseEvent, useRef, useState } from "react";
 import { RootState } from "../../feautures/store";
 import axios from "axios";
 import Router from "next/router";
-import { openFile } from "../../feautures/node/editorSlice";
+import { closeFile, setOpenFile } from "../../feautures/node/nodeSlice";
 
 export const renameActionContextFile = createContext<any>(null)
 
@@ -20,7 +20,7 @@ export default function FileRenderer({
 }) {
   const dispatch = useDispatch();
   const precursorNode = new folderNode(fileNode.precursor);
-  const {contextMenu,selectedNode,motherNode,createNode} = useSelector((state: RootState) => state.motherNode)
+  const {contextMenu,selectedNode,motherNode,tabFiles,openFile} = useSelector((state: RootState) => state.motherNode)
   const [fileName, setFileName] = useState(fileNode.fileName)
   const inputRefFile = useRef() as React.MutableRefObject<HTMLInputElement>;
 
@@ -35,7 +35,7 @@ export default function FileRenderer({
 
   const fileNameStyles: CSSProperties = {
     paddingLeft: `${higherIndex * 10}px`,
-    backgroundColor: selectedNode.toSelect.elementPath === fileNode.elementPath ? 'rgb(227 216 209)' : ''
+    backgroundColor: selectedNode.toSelect.elementPath === fileNode.elementPath ? 'var(--hover_clr)' : ''
   }
 
   const fileNameEventListeners: HTMLAttributes<HTMLDivElement> = {
@@ -47,7 +47,7 @@ export default function FileRenderer({
       toSelect: fileNode
     }))
 
-    dispatch(openFile(fileNode))
+    dispatch(setOpenFile(fileNode))
 
   },
     className: style.node_name,
@@ -79,11 +79,16 @@ export default function FileRenderer({
         ? new fileNodeConstructor(newNodePath, "")
         : new folderNodeCunstructor(newNodePath);
 
-    await axios.put(
+    const resp = await axios.put(
       (process.env.NEXT_PUBLIC_API_URL as string) + "/node",
       { newNode: { ...newNode }, oldNode: fileNode }
     );
-    Router.reload();
+    dispatch(updateNodeSystem(resp.data.motherNode))
+    const match = tabFiles.findIndex(el => {return el.elementPath === fileNode.elementPath})
+    if(match > -1){
+      dispatch(closeFile(fileNode))
+      dispatch(setOpenFile({...newNode}))
+    }
   } catch (error) {
     console.error(error);
   }

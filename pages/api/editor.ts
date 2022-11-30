@@ -1,7 +1,7 @@
 import motherNodeJSON from './motherNode.json'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { motherNode, fileNode, folderNode } from '../../d'
-import updateMotherNodeJSON from '../../utils/updateMotherNodeJSON';
+import updateFile from '../../utils/updateFile';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<{motherNode: motherNode}>){
     console.log('updating');
@@ -14,7 +14,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<{mothe
         })
         const newNode = {...motherNodeJSON[ind], text: fileContents}
         motherNodeJSON.splice(ind, 1, newNode)
-        updateMotherNodeJSON(motherNodeJSON)
+        updateFile(JSON.stringify(motherNodeJSON), process.env.JSON_DB_URI)
         console.log(fileContents);
         return res.status(200).json({motherNode: motherNodeJSON})
     }
