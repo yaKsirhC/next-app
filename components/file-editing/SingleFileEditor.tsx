@@ -1,7 +1,7 @@
 import axios from "axios";
-import { useRef, useState, useLayoutEffect, CSSProperties, FormEvent } from "react";
+import { useRef, useState, useLayoutEffect, CSSProperties, FormEvent, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { keyMap, motherNode } from "../../d";
+import { fileNode, keyMap, motherNode } from "../../d";
 import { fakeUpdateText } from "../../feautures/node/nodeSlice";
 import { updateNodeSystem } from "../../feautures/node/nodeSlice";
 import { RootState } from "../../feautures/store";
@@ -12,11 +12,11 @@ import { bbedit } from '@uiw/codemirror-theme-bbedit';
 
 
 export default function SingleFileEditor() {
-  const { openFile } = useSelector((state: RootState) => state.motherNode);
+  const { openFile,motherNode } = useSelector((state: RootState) => state.motherNode);
   const dispatch = useDispatch();
+  const openFileNode = motherNode.find(el => el.elementPath === openFile) as fileNode
   const divRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const textRef = useRef() as React.MutableRefObject<HTMLTextAreaElement>;
-  const [fileText, setFileText] = useState(openFile?.text);
+  const [fileText, setFileText] = useState(openFileNode?.text);
   const keyMapSave: keyMap = {
     ctrl: true,
     shift: false,
@@ -33,28 +33,35 @@ export default function SingleFileEditor() {
     const resp = await axios.put<{ motherNode: motherNode }>(
       process.env.NEXT_PUBLIC_API_URL + "editor",
       {
-        elementPath: openFile?.elementPath,
+        elementPath: openFileNode?.elementPath,
         text: fileText,
       }
     );
+    console.log(resp.data);
+
     dispatch(fakeUpdateText(fileText));
     dispatch(updateNodeSystem(resp.data.motherNode));
   }
-
+  
   const didPressSave = useListenToKeyCombination(
     keyMapSave,
     divRef,
     submitChanges
   );
 
+  useEffect(() => {
+    // console.log(openFileNode?.text);
+  },[openFileNode?.text])
+
   useLayoutEffect(() => {
-    setFileText(openFile?.text);
-  }, [openFile?.text]);
+    console.log(openFileNode)
+    setFileText(openFileNode?.text);
+  }, [openFileNode?.text]);
 
-  const arePendingChanges = !(fileText === openFile?.text);
+  const arePendingChanges = !(fileText === openFileNode?.text);
 
-  const fileParts = openFile?.elementPath.split("/");
-  const fileExt = openFile?.fileName?.split('.').slice(-1)[0]  
+  const fileParts = openFileNode?.elementPath.split("/");
+  const fileExt = openFileNode?.fileName?.split('.').slice(-1)[0]  
 
   return (
     <>

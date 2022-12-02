@@ -56,7 +56,7 @@ const nodeSlice = createSlice({
         setOpenFile: (state, action) => {
             state.openFile = action.payload
             const match = state.tabFiles.findIndex(file => {
-                return file.elementPath === action.payload.elementPath
+                return file === action.payload
             })
             if(match < 0){
                 state.tabFiles.push(action.payload)
@@ -64,12 +64,13 @@ const nodeSlice = createSlice({
 
         },
         fakeUpdateText: (state, action) => {
-            (state.openFile as fileNode).text = action.payload
+            const openFileNode = state.motherNode.find(el => el.elementPath === state.openFile) as fileNode
+            openFileNode.text = action.payload
         },
         closeFile: (state, action) => {
             const file = action.payload as fileNode
-            const fileIndex = state.tabFiles.findIndex(el => {return el.elementPath ===  file.elementPath})
-            if(file.elementPath === state.openFile?.elementPath){
+            const fileIndex = state.tabFiles.findIndex(el => {return el ===  file.elementPath})
+            if(file.elementPath === state.openFile){
                 state.openFile = fileIndex -1 >= 0 ? state.tabFiles[fileIndex-1] : fileIndex + 1 <= state.tabFiles.length -1 ? state.tabFiles[fileIndex + 1] : null
             }
             state.tabFiles.splice(fileIndex,1)

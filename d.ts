@@ -64,8 +64,8 @@ export interface nodeState {
       left: string;
     };
   };
-  openFile: fileNode | null;
-  tabFiles: fileNode[];
+  openFile: string | null;
+  tabFiles: string[];
 }
 
 export interface keyMap {

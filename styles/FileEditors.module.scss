@@ -1,29 +1,35 @@
 .file_editor{
-    padding-left: 5px;
     background-color: var(--red_1);
 
     .tabs{
         display: flex;
         border-bottom: 1px solid var(--gray_2);
         .tab{
+            cursor: pointer;
             border-inline: 1px solid var(--gray_2);
             gap: 4px;
             display: flex;
             padding: 0px 10px;
+            h5{
+                width: max-content;
+            }
+            span{
+                opacity: 0;
+                transition: opacity 500ms;
+                &:hover{
+                    background-color: rgba(230, 230, 230, 0.078);
+                }
+            }
+            &:hover{
+                span{
+                    opacity: 1;
+                }
+            }
         }
     }
 }
 
 .single_editor_wrapper{
-    // textarea{
-    //     background-color: #fff;
-    //     padding: 5px 0px 0px 10px;
-    //     outline: none;
-    //     border: none;
-    //     resize: none;
-    //     width: 100% !important;
-    //     height: 100% !important;
-    // }
     height: 100%;
     width: 100%;
     .nav_dot{

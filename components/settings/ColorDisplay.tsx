@@ -9,7 +9,6 @@ export default function ColorDisplay({ clrArr }: { clrArr: [string, string] }) {
   const clrCode = clrArr[1];
   const [colorValue, setColorValue] = useState(clrCode);
   const dispatch = useDispatch();
-  const colorBlockRef = useRef() as React.MutableRefObject<HTMLDivElement>;
 
   function decideBlur(e: React.FocusEvent) {
     const el = e.target as HTMLInputElement;
@@ -20,14 +19,10 @@ export default function ColorDisplay({ clrArr }: { clrArr: [string, string] }) {
     dispatch(updateColorScheme({ [clrTitle]: colorValue }));
   }
 
-  useLayoutEffect(() => {
-    colorBlockRef.current.style.backgroundColor = colorValue;
-  }, [colorValue]);
-
   return (
     <div className={styles.color_display}>
       <div className={styles.title}>{clrTitle}</div>
-      <div className={styles.color_block} ref={colorBlockRef}></div>
+      <input className={styles.color_block} type="color" value={clrCode} id="colorPicker"></input>
       <input onBlur={(e) => decideBlur(e)} type="text" onChange={(e) => setColorValue(e.target.value)} value={colorValue} />
     </div>
   );

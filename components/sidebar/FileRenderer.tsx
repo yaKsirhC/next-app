@@ -47,7 +47,7 @@ export default function FileRenderer({
       toSelect: fileNode
     }))
 
-    dispatch(setOpenFile(fileNode))
+    dispatch(setOpenFile(fileNode.elementPath))
 
   },
     className: style.node_name,
@@ -84,10 +84,10 @@ export default function FileRenderer({
       { newNode: { ...newNode }, oldNode: fileNode }
     );
     dispatch(updateNodeSystem(resp.data.motherNode))
-    const match = tabFiles.findIndex(el => {return el.elementPath === fileNode.elementPath})
+    const match = tabFiles.findIndex(el => {return el === fileNode.elementPath})
     if(match > -1){
       dispatch(closeFile(fileNode))
-      dispatch(setOpenFile({...newNode}))
+      dispatch(setOpenFile(newNode.elementPath))
     }
   } catch (error) {
     console.error(error);
