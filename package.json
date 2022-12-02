@@ -24,6 +24,8 @@
     "typescript": "4.9.3"
   },
   "devDependencies": {
+    "@uiw/codemirror-theme-bbedit": "^4.15.1",
+    "@uiw/react-codemirror": "^4.15.1",
     "sass": "^1.56.1"
   }
 }

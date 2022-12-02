@@ -7,7 +7,9 @@ import { updateNodeSystem } from "../../feautures/node/nodeSlice";
 import { RootState } from "../../feautures/store";
 import useListenToKeyCombination from "../../hooks/useListenToKeyCombination";
 import styles from "../../styles/FileEditors.module.scss";
-import LiveHTML from "./LiveHTML";
+import CodeMirror from '@uiw/react-codemirror'
+import { bbedit } from '@uiw/codemirror-theme-bbedit';
+
 
 export default function SingleFileEditor() {
   const { openFile } = useSelector((state: RootState) => state.motherNode);
@@ -72,21 +74,13 @@ export default function SingleFileEditor() {
             <div className={styles.nav_dot}></div>
           ) : undefined}
         </div>
-        <textarea
-        ref={textRef}
-          onChange={(e) => {
-            setFileText(e.target.value)
-          }}
+        <CodeMirror 
+        theme={bbedit}
           value={fileText}
+          readOnly={false}
+          onChange={e => setFileText(e)}
         />
       </div>
-      {/* {
-        fileExt === 'html' && hotHTML ? (
-            <LiveHTML />
-        )
-        :
-        undefined
-      } */}
     </>
   );
 }
