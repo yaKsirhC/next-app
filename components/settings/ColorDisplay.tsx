@@ -22,7 +22,7 @@ export default function ColorDisplay({ clrArr }: { clrArr: [string, string] }) {
   return (
     <div className={styles.color_display}>
       <div className={styles.title}>{clrTitle}</div>
-      <input className={styles.color_block} type="color" value={clrCode} id="colorPicker"></input>
+      <input onBlur={(e) => decideBlur(e)} className={styles.color_block} type="color" onChange={(e) => setColorValue(e.target.value)} value={colorValue} id="colorPicker"></input>
       <input onBlur={(e) => decideBlur(e)} type="text" onChange={(e) => setColorValue(e.target.value)} value={colorValue} />
     </div>
   );

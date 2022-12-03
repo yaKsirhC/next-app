@@ -9,7 +9,6 @@ export default function FileEditorHead(){
     const {tabFiles,motherNode} = useSelector((state: RootState) => state.motherNode)    
 
     function handleScroll(e: UIEvent<HTMLDivElement, globalThis.UIEvent>){
-        console.log(e);
     }
 
     return (

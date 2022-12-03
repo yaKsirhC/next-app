@@ -1,12 +1,12 @@
 import style from "../../styles/Sidebar.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { fileNode, folderNode, motherNode } from "../../d";
+import { fileNode, folderNode } from "../../d";
 import { RootState } from "../../feautures/store";
 import FileRenderer from "./FileRenderer";
 import FolderRenderer from "./FolderRenderer";
 import SidebarHeader from "./SideBarHeader";
-import { setSelectedNode } from "../../feautures/node/nodeSlice";
-import { CSSProperties, useState } from "react";
+import { moveDroppedElement, setSelectedNode } from "../../feautures/node/nodeSlice";
+import { DragEvent } from "react";
 import CreateNodeForm from "./CreateNodeForm";
 import ContextMenu from "./ContextMenu";
 import SidebarFooter from "./SidebarFooter";
@@ -23,6 +23,17 @@ export default function Sidebar() {
   const makeElementStyles = (createNode.folder || createNode.file) && (selectedNode.toCreate.elementPath === 'main')
 
   const ifContextMenu = contextMenu.show && contextMenu.selected
+
+  function mainDrop(e: DragEvent<HTMLDivElement>){
+    const elPath = e.dataTransfer.getData("app/drag");
+      const elPrecursor = elPath.split("/").slice(0, -1).join("/");
+      if (elPrecursor !== 'main') {
+        (e.target as HTMLDivElement).style.backgroundColor = "";
+        (e.target as HTMLDivElement).style.outline = "none";
+        // @ts-ignore
+        dispatch(moveDroppedElement({ dropElement: 'main', DragElement: elPath }));
+      }
+  }
 
   return (
     <section
@@ -55,7 +66,7 @@ export default function Sidebar() {
           );
         })}
       </div>
-      <div onClick={() => dispatch(setSelectedNode('main'))} className={style.filler}></div>
+      <div onDragOver={e => e.preventDefault()} onDrop={e => mainDrop(e)} onClick={() => dispatch(setSelectedNode('main'))} className={style.filler}></div>
       <SidebarFooter />
     </section>
   );

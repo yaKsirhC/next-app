@@ -8,7 +8,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<{motherNode: motherNode} | Error >
 ) {
-  console.log(req.method);
   if(req.method === 'GET') return res.status(200).json({ motherNode: motherNodeJSON })
   if(req.method === 'POST') {
     const newNode = req.body.node
@@ -25,11 +24,9 @@ export default async function handler(
     })
     // @ts-ignore 
     const secondaryNodes = motherNodeJSON.reduce((pre,cur) => {
-      console.log(cur.precursor === deletedNodePath || cur.elementPath === deletedNodePath);
       if(cur.precursor === deletedNodePath || cur.elementPath === deletedNodePath) return [...pre]
       return [...pre,cur]
     },[]) as unknown as motherNode
-    console.log(secondaryNodes);
     if(nodeInd < 0) return res.status(404).send(new Error('node not found'))
     updateFile(JSON.stringify(secondaryNodes),process.env.JSON_DB_URI as string)
     res.status(200).send({motherNode: secondaryNodes })

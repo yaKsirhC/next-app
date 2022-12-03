@@ -1,9 +1,7 @@
-import axios from "axios";
 import { useRef, useState, useLayoutEffect, CSSProperties, FormEvent, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fileNode, keyMap, motherNode } from "../../d";
-import { fakeUpdateText } from "../../feautures/node/nodeSlice";
-import { updateNodeSystem } from "../../feautures/node/nodeSlice";
+import { fileNode, keyMap } from "../../d";
+import { submitTextChange } from "../../feautures/node/nodeSlice";
 import { RootState } from "../../feautures/store";
 import useListenToKeyCombination from "../../hooks/useListenToKeyCombination";
 import styles from "../../styles/FileEditors.module.scss";
@@ -27,34 +25,18 @@ export default function SingleFileEditor() {
     shift: false,
     key: "Tab",
   };
-
-  async function submitChanges() {
-    console.log(fileText);
-    const resp = await axios.put<{ motherNode: motherNode }>(
-      process.env.NEXT_PUBLIC_API_URL + "editor",
-      {
-        elementPath: openFileNode?.elementPath,
-        text: fileText,
-      }
-    );
-    console.log(resp.data);
-
-    dispatch(fakeUpdateText(fileText));
-    dispatch(updateNodeSystem(resp.data.motherNode));
-  }
   
   const didPressSave = useListenToKeyCombination(
     keyMapSave,
     divRef,
-    submitChanges
+    // @ts-ignore
+    () => dispatch(submitTextChange(fileText))
   );
 
   useEffect(() => {
-    // console.log(openFileNode?.text);
   },[openFileNode?.text])
 
   useLayoutEffect(() => {
-    console.log(openFileNode)
     setFileText(openFileNode?.text);
   }, [openFileNode?.text]);
 

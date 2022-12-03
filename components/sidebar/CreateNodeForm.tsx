@@ -1,11 +1,8 @@
-import axios from "axios";
 import React, {  useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fileNode, folderNode, motherNode } from "../../d";
-import { updateCreateNode, pushNode, updateNodeSystem, setShowContextMenu } from "../../feautures/node/nodeSlice";
+import { updateCreateNode, createElement } from "../../feautures/node/nodeSlice";
 import { RootState } from "../../feautures/store";
 import styles from '../../styles/Sidebar.module.scss'
-import ContextMenu from "./ContextMenu";
 
 export default function CreateNodeForm({
   higherIndex = 0,
@@ -18,8 +15,7 @@ export default function CreateNodeForm({
   );
   const dispatch = useDispatch();
 
-  async function submitCreateNode(e?: React.FormEvent){
-    try {
+  function submitCreateNode(e?: React.FormEvent){
       e?.preventDefault()
       if(inputValue.trim().length == 0) return dispatch(updateCreateNode({file: false, folder: false}))
       const newNodePath = (selectedNode.toCreate).elementPath + '/' + inputValue
@@ -27,13 +23,8 @@ export default function CreateNodeForm({
           return node.elementPath === newNodePath
       })
       if(possibleMatch.length > 0) return alert('Node already exists')
-      const newNode = createNode.file ? new fileNode(newNodePath, '') : new folderNode(newNodePath)
-      const resp = await axios.post<{motherNode: motherNode}>(process.env.NEXT_PUBLIC_API_URL + 'node', {node: newNode})
-      dispatch(updateCreateNode({file: false, folder: false}))
-      dispatch(updateNodeSystem(resp.data.motherNode))
-    } catch (error) {
-      console.error(error);
-    }
+      // @ts-ignore
+      dispatch(createElement(newNodePath))
   }
 
   return (

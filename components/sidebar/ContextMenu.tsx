@@ -1,8 +1,7 @@
-import axios from 'axios';
 import { CSSProperties, useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fileNode, folderNode } from '../../d';
-import { setSelectedNode, setShowContextMenu, updateNodeSystem } from '../../feautures/node/nodeSlice';
+import { deleteElement, setSelectedNode, setShowContextMenu, updateNodeSystem } from '../../feautures/node/nodeSlice';
 import { RootState } from '../../feautures/store';
 import styles from '../../styles/Sidebar.module.scss'
 
@@ -44,16 +43,8 @@ export default function ContextMenu({nodeElement}: {nodeElement: (fileNode | fol
         dispatch(setShowContextMenu({show: false, toRename: true, selected: contextMenu.selected}))
 
       },
-      delete: async () => {
-        try {
-          dispatch(setShowContextMenu({show: false, selected: null, toRename: false}))
-          dispatch(setSelectedNode('main'))
-          const resp = await axios.delete(process.env.NEXT_PUBLIC_API_URL + 'node', {params: {node : nodeElement.elementPath}})
-          dispatch(updateNodeSystem(resp.data.motherNode))
-        } catch (error) {
-          console.error(error);
-        }
-      },
+      // @ts-ignore
+      delete: () => dispatch(deleteElement(nodeElement.elementPath)),
 
     }
   return (

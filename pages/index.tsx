@@ -22,7 +22,6 @@ export default function Home({ motherNode }: { motherNode: motherNode }) {
   }
 
   useEffect(() => {
-    console.log("secinf");
     updateCSSVariables(settings.clr_pallete, containerRef.current)
   }, [settings._v]);
 

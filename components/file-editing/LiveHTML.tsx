@@ -8,9 +8,9 @@ export default function LiveHTML(){
     const live = useRef() as React.MutableRefObject<HTMLDivElement>
 
     
-    useEffect(() => {
-        live.current && (live.current.innerHTML = openFile?.text as string)
-    }, [openFile?.text])
+    // useEffect(() => {
+    //     live.current && (live.current.innerHTML = openFile?.text as string)
+    // }, [openFile?.text])
 
     return (
         <div className={styles.live_HTML_container} >

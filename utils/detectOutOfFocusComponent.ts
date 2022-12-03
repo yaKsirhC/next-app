@@ -1,6 +1,5 @@
 export default function detectOutOfFocusComponent(e: MouseEvent, targetEl: HTMLElement, cb: Function) {
   const el = e.target as HTMLElement;
-  console.log(e.target);
   if (
     el != targetEl &&
     (el as HTMLElement)?.parentElement?.parentElement != targetEl &&

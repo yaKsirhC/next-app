@@ -10,7 +10,6 @@ export default function Settings(){
     const settingsRef = useRef() as React.MutableRefObject<HTMLDivElement>
 
     function handleClick(e: MouseEvent){
-        console.log('clicked');
         detectOutOfFocusComponent(e,settingsWrapperRef.current, () => {
             dispatch(setShowModal({modal: false}))
         })

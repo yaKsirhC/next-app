@@ -11,17 +11,28 @@
 }
 
 .node_name {
+  display: flex;
+  align-items: center;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   user-select: none;
   font-size: 12px;
   svg {
+    pointer-events: none;
     fill: var(--gray_2);
     path{
+      pointer-events: none;
       fill: var(--gray_2);
       stroke: var(--gray_2) !important;
     }
+  }
+  .toggle_show{
+    pointer-events: all;
+    
+  }
+  span{
+    pointer-events: none;
   }
   &:hover {
     background-color: var(--beige_2);
@@ -56,13 +67,14 @@
 }
 
 .index_line {
+  pointer-events: none;
   --higherIndex: 0;
   
   &::before {
     z-index: 2;
     position: absolute;
     content: "";
-    left: calc(var(--higherIndex) * 6px);
+    left: calc(var(--higherIndex) *10px - 4px);
     top: 0;
     bottom: 0;
     width: 1px;
