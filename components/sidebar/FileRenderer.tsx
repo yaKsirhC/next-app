@@ -55,7 +55,7 @@ export default function FileRenderer({
   }
 
 
-  async function handleModify(e: FocusEvent<HTMLInputElement, Element>){
+  async function handleModiy(e: FocusEvent<HTMLInputElement, Element>){
     try {
     dispatch(setShowContextMenu({selected: null, toRename: false, show: false}))
     if(e.target.value.trim().length == 0) {
@@ -92,6 +92,32 @@ export default function FileRenderer({
   } catch (error) {
     console.error(error);
   }
+  }
+
+  function handleModify(e: FocusEvent<HTMLInputElement, Element>){
+    const newPath = e.target.value 
+    if (newPath.trim().length == 0) {
+        setFileName(fileNode.elementName);
+      return 
+    }
+    const prevPath = fileNode.elementPath.split("/");
+        prevPath.splice(-1, 1, newPath);
+        const newNodePath = prevPath.join("/");
+        const matchesInd = motherNode.findIndex((node) => {
+          return node.elementPath === newNodePath;
+        });
+    if (matchesInd >= 0) {
+      console.log(fileNode.elementName !== newPath);
+      if(fileNode.elementName !== newPath){
+          alert("element exists");
+      }
+    setFileName(fileNode.elementName);
+  return
+    
+  }
+    
+    // @ts-ignore
+    dispatch(renameElement({newPath, previousElement: fileNode}))
   }
 
   const ifToRename = contextMenu.toRename && contextMenu.selected?.elementPath === fileNode.elementPath
