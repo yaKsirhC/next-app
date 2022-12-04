@@ -4,10 +4,12 @@ import { keyMap } from "../d";
 
 export default function useListenToKeyCombination(keyMap: keyMap, ref: React.MutableRefObject<HTMLElement>, cb: Function){
     const [didPressCombination, setDidPressCombination] = useState(false)
+    let e: KeyboardEvent;
 
     function handleKeyChanges(e: KeyboardEvent){
         if(e.ctrlKey === keyMap.ctrl && e.shiftKey === keyMap.shift && e.key === keyMap.key){
             e.preventDefault()
+            e = e;
             setDidPressCombination(true)
         }
     }
@@ -16,7 +18,7 @@ export default function useListenToKeyCombination(keyMap: keyMap, ref: React.Mut
         if(didPressCombination){
             const promise = new Promise((resolve,reject) => {
                 try {
-                    cb()
+                    cb(e)
                     resolve(true)
                 } catch (error) {
                     reject(error)

@@ -49,6 +49,7 @@ export interface createNode {
   folder: boolean;
 }
 export interface nodeState {
+  isLoadingNode: boolean;
   motherNode: motherNode;
   selectedNode: {
     toCreate: folderNode;
@@ -66,6 +67,10 @@ export interface nodeState {
   };
   openFile: string | null;
   tabFiles: string[];
+  nodeError: {
+    has: boolean;
+    message: string;
+  };
 }
 
 export interface keyMap {
@@ -75,17 +80,16 @@ export interface keyMap {
 }
 
 export interface settingsState {
+  isLoadingSettings: boolean;
+  settingsError: {
+    has: boolean;
+    message: string;
+  };
   show: {
     modal: boolean;
     editor: boolean;
   };
-  settings: {
-    _v: number;
-    clr_pallete: clr_pallete;
-    fnt: {
-      family: string;
-    };
-  };
+  settings: settings;
 }
 
 export interface clr_pallete {
@@ -98,3 +102,9 @@ export interface clr_pallete {
   red_2: string;
   red_3: string;
 }
+
+export interface fnt {
+  family: string;
+}
+
+export type settings = { _v: number } & { fnt: fnt } & { clr_pallete: clr_pallete };

@@ -44,8 +44,6 @@ export const submitTextChange = createAsyncThunk("nodeSlice/submitTextChange", a
       text,
     });
 
-    console.log(resp.data);
-
     return thunkAPI.fulfillWithValue(resp.data.motherNode);
   } catch (error) {
     console.error(error);
@@ -55,7 +53,6 @@ export const submitTextChange = createAsyncThunk("nodeSlice/submitTextChange", a
 
 export const deleteElement = createAsyncThunk("nodeSlice/deleteElement", async (payload: any, thunkAPI) => {
   try {
-    console.log(payload);
     const resp = await axios.delete(process.env.NEXT_PUBLIC_API_URL + "node", { params: { node: payload } });
 
     return thunkAPI.fulfillWithValue(resp.data.motherNode);
@@ -70,15 +67,29 @@ export const createElement = createAsyncThunk("nodeSlice/createElement", async (
     const state = (thunkAPI.getState() as RootState).motherNode;
     const newNode = state.createNode.file ? new fileNode(payload, "") : new folderNode(payload);
     const resp = await axios.post<{ motherNode: motherNode }>(process.env.NEXT_PUBLIC_API_URL + "node", { node: newNode });
-    return thunkAPI.fulfillWithValue(resp.data.motherNode)
+    return thunkAPI.fulfillWithValue(resp.data.motherNode);
   } catch (error) {
     console.error(error);
-    return thunkAPI.rejectWithValue(error)
-    
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+export const initialiseMotherNode = createAsyncThunk("nodeSlice/initialiseMotherNode", async (payload, thunkAPI) => {
+  try {
+    const resp = await axios.get<{ motherNode: { motherNode: motherNode } }>(process.env.NEXT_PUBLIC_API_URL + "node");
+    return thunkAPI.fulfillWithValue(resp.data.motherNode);
+  } catch (error) {
+    console.error(error);
+    return thunkAPI.rejectWithValue(error);
   }
 });
 
 const initialState: nodeState = {
+  nodeError: {
+    has: false,
+    message: "",
+  },
+  isLoadingNode: true,
   motherNode: [],
   createNode: {
     file: false,
@@ -106,6 +117,9 @@ const nodeSlice = createSlice({
   initialState,
 
   reducers: {
+    setLoadingNodeSlice: (state, action) => {
+      state.isLoadingNode = action.payload;
+    },
     pushNode: (state, action) => {
       state.motherNode.push(action.payload);
     },
@@ -147,46 +161,86 @@ const nodeSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(renameElement.pending, (state, action) => {});
+    builder.addCase(renameElement.pending, (state, action) => {
+      state.isLoadingNode = true;
+    });
     builder.addCase(renameElement.rejected, (state, action) => {
+      state.nodeError.has = true;
+      state.isLoadingNode = false;
       state.contextMenu = { ...state.contextMenu, ...{ selected: null, show: false, toRename: false } };
       state.motherNode = state.motherNode;
     });
     builder.addCase(renameElement.fulfilled, (state, action) => {
+      state.isLoadingNode = false;
       state.contextMenu = { ...state.contextMenu, ...{ selected: null, show: false, toRename: false } };
       state.motherNode = action.payload as unknown as any;
     });
-    builder.addCase(moveDroppedElement.pending, (state, action) => {});
+    builder.addCase(moveDroppedElement.pending, (state, action) => {
+      state.isLoadingNode = true;
+    });
     builder.addCase(moveDroppedElement.rejected, (state, action) => {
+      state.nodeError.has = true;
+      state.isLoadingNode = false;
       // state.contextMenu = {...state.contextMenu, ...{selected: null,show: false, toRename: false}}
       // state.motherNode = state.motherNode
     });
     builder.addCase(moveDroppedElement.fulfilled, (state, action) => {
+      state.isLoadingNode = false;
       state.motherNode = action.payload as any;
       // state.contextMenu = {...state.contextMenu, ...{selected: null,show: false, toRename: false}}
       // state.motherNode = action.payload as unknown as any
     });
-    builder.addCase(submitTextChange.pending, (state, action) => {});
-    builder.addCase(submitTextChange.rejected, (state, action) => {});
-    builder.addCase(submitTextChange.fulfilled, (state, action) => {
-      state.motherNode = action.payload as any;
-      console.log(action.payload);
+    builder.addCase(submitTextChange.pending, (state, action) => {
+      state.isLoadingNode = true;
     });
-    builder.addCase(deleteElement.pending, (state, action) => {});
-    builder.addCase(deleteElement.rejected, (state, action) => {});
+    builder.addCase(submitTextChange.rejected, (state, action) => {
+      state.nodeError.has = true;
+      state.isLoadingNode = false;
+    });
+
+    builder.addCase(submitTextChange.fulfilled, (state, action) => {
+      state.isLoadingNode = false;
+      state.motherNode = action.payload as any;
+    });
+    builder.addCase(deleteElement.pending, (state, action) => {
+      state.isLoadingNode = true;
+    });
+    builder.addCase(deleteElement.rejected, (state, action) => {
+      state.nodeError.has = true;
+      state.isLoadingNode = false;
+    });
+
     builder.addCase(deleteElement.fulfilled, (state, action) => {
+      state.isLoadingNode = false;
       state.motherNode = action.payload as any;
       state.contextMenu = { ...state.contextMenu, ...{ selected: null, show: false, toRename: false } };
       state.selectedNode.toCreate = { ...defaultSelectedNode };
       state.selectedNode.toSelect = { ...defaultSelectedNode };
-      
-      console.log(action.payload);
     });
-    builder.addCase(createElement.pending, (state, action) => {});
-    builder.addCase(createElement.rejected, (state, action) => {});
+    builder.addCase(createElement.pending, (state, action) => {
+      state.isLoadingNode = true;
+    });
+    builder.addCase(createElement.rejected, (state, action) => {
+      state.nodeError.has = true;
+      state.isLoadingNode = false;
+    });
+
     builder.addCase(createElement.fulfilled, (state, action) => {
-      state.motherNode = action.payload as any;
+      state.isLoadingNode = false;
       state.createNode = {file: false, folder: false}
+      state.motherNode = action.payload as any;
+    });
+
+    builder.addCase(initialiseMotherNode.pending, (state, action) => {
+      state.isLoadingNode = true;
+    });
+    builder.addCase(initialiseMotherNode.rejected, (state, action) => {
+      state.nodeError.has = true;
+      state.isLoadingNode = false;
+    });
+    builder.addCase(initialiseMotherNode.fulfilled, (state, action) => {
+      state.isLoadingNode = false;
+      state.motherNode = action.payload as any;
     });
   },
 });

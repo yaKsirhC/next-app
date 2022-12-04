@@ -1,9 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100&family=Lato:wght@100&family=Montserrat:wght@100&family=Noto+Sans+Display:wght@100&family=Open+Sans:wght@300&family=Poppins:wght@100&family=Raleway:wght@100&family=Roboto:wght@100&family=Ubuntu:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+
 *, *::after, *::before {
   padding: 0;
+  font-family: var(--base_font_family);
+  font-size: var(--base-fnt-size);
   margin: 0;
   box-sizing: border-box;
 }
 :root{
+  --base_font_family: sans-serif;
+  --base_font_weight: 600;
+  --base-fnt-size: 14px;
   --beige_1 : rgb(227 216 209);
   --beige_2 : #CEC8C3;
   --beige_3 : #d8c3b5;
@@ -37,8 +45,8 @@ html{
   } 
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: var(--base_font_family);
+  font-weight: var(--base_font_weight);
 }
 
 a {

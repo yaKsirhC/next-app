@@ -51,12 +51,12 @@ export default function SingleFileEditor() {
         <div className={styles.navigation_file}>
           {fileParts?.map((part, ind) => {
             return (
-              <>
-                <span key={ind} className={styles.nav_p}>
+              <pre key={ind}>
+                <span className={styles.nav_p}>
                   {part}
                 </span>
                 {ind + 1 <= fileParts.length - 1 ? <div>&gt;</div> : undefined}
-              </>
+              </pre>
             );
           })}
           {arePendingChanges ? (

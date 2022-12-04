@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux'
 import { setShowModal } from '../../feautures/node/settingsSlice'
 import styles from '../../styles/Settings.module.scss'
 import ColorPallete from './ColorPallete'
+import FontSettings from './FontSettings'
 
 export default function SettingsFile(){
 
@@ -14,6 +15,9 @@ export default function SettingsFile(){
             </div>
             <div className={styles.color}>
                 <ColorPallete />
+            </div>
+            <div className={styles.font_settings}>
+                <FontSettings />
             </div>
         </div>
     )

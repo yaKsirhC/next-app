@@ -1,8 +1,7 @@
 import React, { CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { updateColorScheme } from "../../feautures/node/settingsSlice";
+import { updateSettings } from "../../feautures/node/settingsSlice";
 import styles from "../../styles/Settings.module.scss";
-import detectOutOfFocusComponent from "../../utils/detectOutOfFocusComponent";
 
 export default function ColorDisplay({ clrArr }: { clrArr: [string, string] }) {
   const clrTitle = clrArr[0];
@@ -16,12 +15,12 @@ export default function ColorDisplay({ clrArr }: { clrArr: [string, string] }) {
       return;
     }
     // @ts-ignore
-    dispatch(updateColorScheme({ [clrTitle]: colorValue }));
+    dispatch(updateSettings({schemeChange: { [clrTitle]: colorValue }}));
   }
 
   return (
     <div className={styles.color_display}>
-      <div className={styles.title}>{clrTitle}</div>
+      <div className={styles.title}><span>{clrTitle}</span></div>
       <input onBlur={(e) => decideBlur(e)} className={styles.color_block} type="color" onChange={(e) => setColorValue(e.target.value)} value={colorValue} id="colorPicker"></input>
       <input onBlur={(e) => decideBlur(e)} type="text" onChange={(e) => setColorValue(e.target.value)} value={colorValue} />
     </div>

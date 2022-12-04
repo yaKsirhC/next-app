@@ -31,7 +31,6 @@ export default function Settings(){
             <div ref={settingsRef} className={`${styles.settings}`}>
                 {/* @ts-ignore */}
             <p onClick={() => dispatch(setShowModal({editor: true, modal: false}))} style={{'--clr': 'blue'}}>open settings on file editor</p>
-            <p>Open Advanced Folder Structure</p>
             </div>
         </div>
     )

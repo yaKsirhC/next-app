@@ -35,4 +35,46 @@
             }
         }
     }
+    .font_settings{
+        option[value="Poppins"]{
+            font-family: Poppins;
+            font-weight: var(--base_font_weight);
+        }
+        option[value="Roboto"]{
+            font-family: Roboto;
+            font-weight: var(--base_font_weight);
+        }
+        option[value="Inter"]{
+            font-family: Inter;
+            font-weight: var(--base_font_weight);
+        }
+        option[value="Lato"]{
+            font-family: Lato;
+            font-weight: var(--base_font_weight);
+        }
+        option[value="Montserrat"]{
+            font-family: Montserrat;
+            font-weight: var(--base_font_weight);
+        }
+        option[value="Noto Sans Display"]{
+            font-family: Noto;
+            font-weight: var(--base_font_weight);
+        }
+        option[value="Open Sans"]{
+            font-family: Open;
+            font-weight: var(--base_font_weight);
+        }
+        option[value="Raleway"]{
+            font-family: Raleway;
+            font-weight: var(--base_font_weight);
+        }
+        option[value="Ubuntu"]{
+            font-family: Ubuntu;
+            font-weight: var(--base_font_weight);
+        }
+        option[value="Dancing Script"]{
+            font-family: Dancing Script;
+            font-weight: var(--base_font_weight);
+        }
+    }
 }

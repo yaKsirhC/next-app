@@ -47,6 +47,9 @@
         align-items: center;
         flex-direction: row;
         padding-bottom: 4px;
+        pre{
+            display: flex;
+        }
     }
 }
 .live_HTML_container{

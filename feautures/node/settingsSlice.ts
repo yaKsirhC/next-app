@@ -1,23 +1,42 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { clr_pallete, settingsState } from "../../d";
+import { clr_pallete, fnt, settingsState } from "../../d";
 import { RootState } from "../store";
 
-export const updateColorScheme = createAsyncThunk("settingsSlice/updateColorScheme", async (schemeChange, thunkApi) => {
+export const updateSettings = createAsyncThunk("settingsSlice/updateColorScheme", async ({schemeChange, fontSettings}: any, thunkAPI) => {
   try {
-    const previousScheme = (thunkApi.getState() as RootState).settings.settings.clr_pallete as clr_pallete
+    const previousScheme = (thunkAPI.getState() as RootState).settings.settings.clr_pallete as clr_pallete
     const newScheme = {...previousScheme, ...schemeChange as any}
+    const previousFntSettings = (thunkAPI.getState() as RootState).settings.settings.fnt as fnt
+    const newFontSettings = {...previousFntSettings, ...fontSettings as any}
 
-    const resp = await axios.put(process.env.NEXT_PUBLIC_API_URL as string + 'settings', {scheme: newScheme})
-    return thunkApi.fulfillWithValue<{settings: {}}>(resp.data)
+    const resp = await axios.put(process.env.NEXT_PUBLIC_API_URL as string + 'settings', {scheme: newScheme, font: newFontSettings})
+    return thunkAPI.fulfillWithValue<{settings: {}}>(resp.data);
+
   } catch (error) {
     console.error(error);
-    return thunkApi.rejectWithValue(error)
+    return thunkAPI.rejectWithValue(error)
     
   }
 });
 
+export const initialiseSettings = createAsyncThunk('settingsSlice/initialiseSettings', async (payload, thunkAPI) => {
+  try {
+    const resp = await axios.get(process.env.NEXT_PUBLIC_API_URL + "settings");
+    return thunkAPI.fulfillWithValue(resp.data)
+  } catch (error) {
+    console.error(error);
+    return thunkAPI.rejectWithValue(error)
+    
+  }
+})
+
 const initialState: settingsState = {
+  settingsError: {
+    has: false,
+    message:''
+  },
+  isLoadingSettings: true,
   show: {
     editor: false,
     modal: false,
@@ -44,21 +63,44 @@ const settingsSlice = createSlice({
   name: "settingsSlice",
   initialState,
   reducers: {
+    setLoadingSettingsSlice: (state, action) => {
+      state.isLoadingSettings = action.payload
+    },
     setShowModal: (state, action) => {
       state.show = { ...state.show, ...action.payload };
     },
+    updateSettings: (state, action) => {
+      state.settings = action.payload
+    }
   },
   extraReducers: builder =>  {
-    builder.addCase(updateColorScheme.fulfilled, (state, action) => {
+    builder.addCase(updateSettings.fulfilled, (state, action) => {
       // @ts-ignore
       state.settings = action.payload.settings
-
+      state.isLoadingSettings = false
     })
-    builder.addCase(updateColorScheme.rejected, (state, action) => {
+    builder.addCase(updateSettings.rejected, (state, action) => {
+      state.settingsError.has = true
+      state.isLoadingSettings = false
       // later
     })
-    builder.addCase(updateColorScheme.pending, (state, action) => {
+    builder.addCase(updateSettings.pending, (state, action) => {
       // later
+      state.isLoadingSettings = true
+    })
+    builder.addCase(initialiseSettings.fulfilled, (state, action) => {
+      // @ts-ignore
+      state.settings = action.payload.settings
+      state.isLoadingSettings = false
+    })
+    builder.addCase(initialiseSettings.rejected, (state, action) => {
+      state.settingsError.has = true
+      state.isLoadingSettings = false
+      // later
+    })
+    builder.addCase(initialiseSettings.pending, (state, action) => {
+      // later
+      state.isLoadingSettings = true
     })
   }
 });
