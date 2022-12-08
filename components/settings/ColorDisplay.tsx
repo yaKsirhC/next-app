@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateSettings } from "../../feautures/node/settingsSlice";
 import styles from "../../styles/Settings.module.scss";

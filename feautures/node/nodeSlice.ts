@@ -3,8 +3,6 @@ import axios from "axios";
 import { fileNode, folderNode, motherNode, nodeState } from "../../d";
 import { RootState } from "../store";
 
-const defaultSelectedNode = new folderNode("main");
-
 export const renameElement = createAsyncThunk("nodeSlice/renameElement", async (payload: any, thunkAPI) => {
   try {
     const newPath = payload.newPath;
@@ -24,7 +22,7 @@ export const renameElement = createAsyncThunk("nodeSlice/renameElement", async (
 
 export const moveDroppedElement = createAsyncThunk("nodeSlice/moveDroppedElement", async (payload: any, thunkAPI) => {
   try {
-    const dragElement = (thunkAPI.getState() as RootState).motherNode.motherNode.find((el) => el.elementPath === payload.DragElement);
+    const dragElement = payload.dragElement;
     const resp = await axios.put(process.env.NEXT_PUBLIC_API_URL + "drag", { dragElement, dropElement: payload.dropElement });
 
     return thunkAPI.fulfillWithValue(resp.data);
@@ -96,8 +94,8 @@ const initialState: nodeState = {
     folder: false,
   },
   selectedNode: {
-    toCreate: { ...defaultSelectedNode },
-    toSelect: { ...defaultSelectedNode },
+    toCreate: "main",
+    toSelect: "main",
   },
   contextMenu: {
     selected: null,
@@ -127,12 +125,12 @@ const nodeSlice = createSlice({
       state.motherNode = action.payload;
     },
     setSelectedNode: (state, action) => {
-      if (action.payload === "main") {
-        state.selectedNode.toCreate = { ...defaultSelectedNode };
-        state.selectedNode.toSelect = { ...defaultSelectedNode };
-      } else {
-        state.selectedNode = action.payload;
-      }
+      // if (action.payload === "main") {
+      //   state.selectedNode.toCreate = { ...defaultSelectedNode };
+      //   state.selectedNode.toSelect = { ...defaultSelectedNode };
+      // } else {
+      state.selectedNode = action.payload;
+      // }
     },
     updateCreateNode: (state, action) => {
       state.createNode = action.payload;
@@ -154,6 +152,7 @@ const nodeSlice = createSlice({
       const fileIndex = state.tabFiles.findIndex((el) => {
         return el === file.elementPath;
       });
+      if (fileIndex == -1) return;
       if (file.elementPath === state.openFile) {
         state.openFile = fileIndex - 1 >= 0 ? state.tabFiles[fileIndex - 1] : fileIndex + 1 <= state.tabFiles.length - 1 ? state.tabFiles[fileIndex + 1] : null;
       }
@@ -214,8 +213,8 @@ const nodeSlice = createSlice({
       state.isLoadingNode = false;
       state.motherNode = action.payload as any;
       state.contextMenu = { ...state.contextMenu, ...{ selected: null, show: false, toRename: false } };
-      state.selectedNode.toCreate = { ...defaultSelectedNode };
-      state.selectedNode.toSelect = { ...defaultSelectedNode };
+      state.selectedNode.toCreate = "main";
+      state.selectedNode.toSelect = "main";
     });
     builder.addCase(createElement.pending, (state, action) => {
       state.isLoadingNode = true;
@@ -227,7 +226,7 @@ const nodeSlice = createSlice({
 
     builder.addCase(createElement.fulfilled, (state, action) => {
       state.isLoadingNode = false;
-      state.createNode = {file: false, folder: false}
+      state.createNode = { file: false, folder: false };
       state.motherNode = action.payload as any;
     });
 

@@ -1,6 +1,8 @@
 .settings{
     padding-inline: 40px;
     display: flex;
+    align-items: center;
+    gap: 50px;
     flex-direction: column;
     .close_settings{
         align-self: end;
@@ -34,6 +36,9 @@
                 text-align: center;
             }
         }
+    }
+    .info{
+        color: rgb(58, 58, 58);
     }
     .font_settings{
         option[value="Poppins"]{
@@ -76,5 +81,13 @@
             font-family: Dancing Script;
             font-weight: var(--base_font_weight);
         }
+
+        .font{
+            h2{
+                text-align: center;
+                padding-bottom: 10px;
+            }
+        }
     }
+
 }

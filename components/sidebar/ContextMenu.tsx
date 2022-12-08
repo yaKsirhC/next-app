@@ -1,7 +1,7 @@
-import { CSSProperties, useContext, useEffect, useRef, useState } from 'react';
+import { CSSProperties, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fileNode, folderNode } from '../../d';
-import { deleteElement, setSelectedNode, setShowContextMenu, updateNodeSystem } from '../../feautures/node/nodeSlice';
+import { closeFile, deleteElement, setShowContextMenu } from '../../feautures/node/nodeSlice';
 import { RootState } from '../../feautures/store';
 import styles from '../../styles/Sidebar.module.scss'
 
@@ -43,8 +43,13 @@ export default function ContextMenu({nodeElement}: {nodeElement: (fileNode | fol
         dispatch(setShowContextMenu({show: false, toRename: true, selected: contextMenu.selected}))
 
       },
-      // @ts-ignore
-      delete: () => dispatch(deleteElement(nodeElement.elementPath)),
+      delete: () => {
+        if(nodeElement.type === 'file'){
+          dispatch(closeFile(nodeElement))
+        }
+        // @ts-ignore
+        dispatch(deleteElement(nodeElement.elementPath))
+      },
 
     }
   return (
@@ -90,7 +95,7 @@ export default function ContextMenu({nodeElement}: {nodeElement: (fileNode | fol
         <span>Delete</span>
       </div>
       <div className={styles.path_options}>
-        <p>main/folder1gggggggggggggggggggggggggg</p>
+        <p>{nodeElement.elementName}</p>
         <svg
         ref={svgRef}
           className="clipboard"

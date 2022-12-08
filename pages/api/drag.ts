@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { fileNode, folderNode } from "../../d";
-import comparePaths from "../../utils/comparePaths";
 import updateFile from "../../utils/updateFile";
 import motherNodeJSON from './motherNode.json'
 

@@ -1,9 +1,9 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { clr_pallete, fnt, keyMap } from "../d";
-import React, { useEffect, useLayoutEffect, useRef } from "react";
-import { deleteElement, initialiseMotherNode } from "../feautures/node/nodeSlice";
+import { clr_pallete, fnt } from "../d";
+import React, { useEffect, useRef } from "react";
+import { initialiseMotherNode } from "../feautures/node/nodeSlice";
 import Sidebar from "../components/sidebar/Sidebar";
 import FileEditors from "../components/file-editing/FileEditors";
 import { RootState } from "../feautures/store";
@@ -12,7 +12,6 @@ import { initialiseSettings } from "../feautures/node/settingsSlice";
 import { ToastContainer,toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from "../components/Loader";
-import useListenToKeyCombination from "../hooks/useListenToKeyCombination";
 
 
 export default function Home() {
@@ -34,7 +33,7 @@ export default function Home() {
     });
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     updateCSSVariables(settings.clr_pallete, containerRef.current);
     updateFontSettings(settings.fnt, containerRef.current);
   }, [settings._v]);
@@ -47,23 +46,27 @@ export default function Home() {
     }
   }, [nodeError.has,settingsError.has])
 
-  const deleteKeyMap: keyMap = {
-    ctrl: false,
-    shift: false,
-    key: 'Delete'
-  }
+  // function handleDeleteKey(e: KeyboardEvent){    
+  //   if(e.key === 'Delete'){
+  //     if(selectedNode.toSelect && selectedNode.toSelect.elementPath !== 'main'){
+  //       e.preventDefault()
+  //       // @ts-ignore
+  //       dispatch(deleteElement(selectedNode.toSelect.elementPath))
+  //       if(selectedNode.toSelect.type === 'file'){
+  //         dispatch(closeFile(selectedNode.toSelect))
+  //       }
+  //       // dispatch(setSelectedNode('main'))
+  //     }
 
-  // function handleDeleteKey(){
-  //   if(selectedNode.toSelect.elementPath !== 'main'){
-  //     dispatch(deleteElement(selectedNode))
   //   }
   // }
 
-  // const didPressDelete = useListenToKeyCombination(deleteKeyMap,window, )
 
   // useEffect(() => {
-  //   window.addEventListener('keydown', )
-  // }, [])
+  //   window.addEventListener('keydown',handleDeleteKey)
+
+  //   return () => containerRef.current.removeEventListener('keydown', handleDeleteKey)
+  // }, [selectedNode])
 
   const dispatch = useDispatch();
   useEffect(() => {

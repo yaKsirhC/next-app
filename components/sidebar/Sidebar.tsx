@@ -20,7 +20,7 @@ export default function Sidebar() {
     return node.precursor === "main";
   });
 
-  const makeElementStyles = (createNode.folder || createNode.file) && (selectedNode.toCreate.elementPath === 'main')
+  const makeElementStyles = (createNode.folder || createNode.file) && (selectedNode.toCreate === 'main')
 
   const ifContextMenu = contextMenu.show && contextMenu.selected
 

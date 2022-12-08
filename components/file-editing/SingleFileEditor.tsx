@@ -1,9 +1,8 @@
-import { useRef, useState, useLayoutEffect, CSSProperties, FormEvent, useEffect } from "react";
+import { useRef, useState, useLayoutEffect, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fileNode, keyMap } from "../../d";
+import { fileNode } from "../../d";
 import { submitTextChange } from "../../feautures/node/nodeSlice";
 import { RootState } from "../../feautures/store";
-import useListenToKeyCombination from "../../hooks/useListenToKeyCombination";
 import styles from "../../styles/FileEditors.module.scss";
 import CodeMirror from '@uiw/react-codemirror'
 import { bbedit } from '@uiw/codemirror-theme-bbedit';
@@ -15,26 +14,27 @@ export default function SingleFileEditor() {
   const openFileNode = motherNode.find(el => el.elementPath === openFile) as fileNode
   const divRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const [fileText, setFileText] = useState(openFileNode?.text);
-  const keyMapSave: keyMap = {
-    ctrl: true,
-    shift: false,
-    key: "s",
-  };
-  const keyMapTab: keyMap = {
-    ctrl: false,
-    shift: false,
-    key: "Tab",
-  };
-  
-  const didPressSave = useListenToKeyCombination(
-    keyMapSave,
-    divRef,
-    // @ts-ignore
-    () => dispatch(submitTextChange(fileText))
-  );
+
+
+  function handleCtrlS(e: KeyboardEvent){
+    if(e.key === 's' && e.ctrlKey == true){
+      e.preventDefault()
+      // @ts-ignore
+      dispatch(submitTextChange(fileText))
+
+    }
+
+  }
 
   useEffect(() => {
-  },[openFileNode?.text])
+    divRef.current.addEventListener('keydown', handleCtrlS)
+
+    return () => {
+      if(divRef.current){
+        divRef.current.removeEventListener('keydown',handleCtrlS)
+      }
+    }
+  })
 
   useLayoutEffect(() => {
     setFileText(openFileNode?.text);

@@ -1,10 +1,7 @@
-import { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../feautures/store";
+import {  useRef } from "react";
 import styles from '../../styles/FileEditors.module.scss'
 
 export default function LiveHTML(){
-    const {openFile} = useSelector((state: RootState) => state.motherNode)
     const live = useRef() as React.MutableRefObject<HTMLDivElement>
 
     

@@ -8,7 +8,7 @@ export default function SidebarHeader() {
 
   return (
     <header className={style.header}>
-      <p className={style.obl}>Obligations</p>
+      <p className={style.obl}>VirtualFileSystem 1.0</p>
       <div className={style.create_node_options}>
         <svg
           onClick={() => dispatch(updateCreateNode({file: true, folder: false}))}

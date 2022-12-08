@@ -18,7 +18,7 @@ export default function CreateNodeForm({
   function submitCreateNode(e?: React.FormEvent){
       e?.preventDefault()
       if(inputValue.trim().length == 0) return dispatch(updateCreateNode({file: false, folder: false}))
-      const newNodePath = (selectedNode.toCreate).elementPath + '/' + inputValue
+      const newNodePath = (selectedNode.toCreate) + '/' + inputValue
       const possibleMatch = motherNode.filter(node => {
           return node.elementPath === newNodePath
       })

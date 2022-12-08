@@ -1,13 +1,12 @@
 import motherNodeJSON from './motherNode.json'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { motherNode, fileNode, folderNode } from '../../d'
+import { motherNode } from '../../d'
 import updateFile from '../../utils/updateFile';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<{motherNode: motherNode}>){
     if(req.method === 'PUT'){
         const fileContents = req.body.text
         const file = req.body.elementPath
-        console.log(fileContents);
 
         const ind = motherNodeJSON.findIndex(node => {
             return node.elementPath === file

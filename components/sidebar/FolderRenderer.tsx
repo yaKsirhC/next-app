@@ -5,14 +5,14 @@ import CreateNodeForm from "./CreateNodeForm";
 import ChildrenNodeMap from "./ChildNodeMap";
 import React, { createContext, CSSProperties, FocusEvent, HTMLAttributes, MouseEvent, useEffect, useRef, useState } from "react";
 import { RootState } from "../../feautures/store";
-import { moveDroppedElement, renameElement, setSelectedNode, setShowContextMenu } from "../../feautures/node/nodeSlice";
+import { closeFile, moveDroppedElement, renameElement, setSelectedNode, setShowContextMenu } from "../../feautures/node/nodeSlice";
 
 export const renameActionContextFolder = createContext<any>(null);
 
 export default function FolderRenderer({ folderNode, higherIndex = 1 }: { folderNode: folderNode; higherIndex?: number }) {
   const { motherNode, createNode, selectedNode, contextMenu } = useSelector((state: RootState) => state.motherNode);
   const dispatch = useDispatch();
-  const makeElementStyles = (createNode.folder || createNode.file) && selectedNode.toCreate.elementPath === folderNode.elementPath;
+  const makeElementStyles = (createNode.folder || createNode.file) && selectedNode.toCreate === folderNode.elementPath;
   const [folderName, setFolderName] = useState(folderNode.elementName);
   const [showChildren, setShowChildren] = useState(false);
   const toggleShowRef = useRef() as React.MutableRefObject<SVGSVGElement>;
@@ -22,27 +22,31 @@ export default function FolderRenderer({ folderNode, higherIndex = 1 }: { folder
   });
   const folderNameStyles: CSSProperties = {
     paddingLeft: `${higherIndex * 10}px`,
-    backgroundColor: selectedNode.toSelect.elementPath === folderNode.elementPath ? "var(--hover_clr)" : "",
+    backgroundColor: selectedNode.toSelect === folderNode.elementPath ? "var(--active_clr)" : "",
   };
   const folderNameEventListeners: HTMLAttributes<HTMLDivElement> = {
     style: folderNameStyles,
     onClick: () =>
       dispatch(
         setSelectedNode({
-          toCreate: folderNode,
-          toSelect: folderNode,
+          toCreate: folderNode.elementPath,
+          toSelect: folderNode.elementPath,
         })
       ),
     onDoubleClick: (e) => {
       setShowChildren((pre) => !pre);
     },
     onDrop: (e) => {
-      const elPath = e.dataTransfer.getData("app/drag");
-      const elPrecursor = elPath.split("/").slice(0, -1).join("/");
       (e.target as HTMLDivElement).style.backgroundColor = "";
       (e.target as HTMLDivElement).style.outline = "none";
+      const elPath = e.dataTransfer.getData("app/drag");
+      const nodeElement = motherNode.find((el) => el.elementPath === elPath);
+      const elPrecursor = elPath.split("/").slice(0, -1).join("/");
+      if (nodeElement?.type === "file") {
+        dispatch(closeFile(nodeElement));
+      }
       // @ts-ignore
-      dispatch(moveDroppedElement({ dropElement: folderNode, DragElement: elPath }));
+      dispatch(moveDroppedElement({ dropElement: folderNode, dragElement: nodeElement }));
     },
     onDragOver: (e) => {
       e.preventDefault();

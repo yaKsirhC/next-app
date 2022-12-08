@@ -48,7 +48,7 @@ const initialState: settingsState = {
       beige_2: "#cec8c3",
       beige_3: "#d8c3b5",
       gray_2: " rgba(58, 59, 74, 0.689)",
-      hover_clr: "#393c3e",
+      active_clr: "#393c3e",
       red_1: "rgba(219, 42, 42, 0.09)",
       red_2: "rgb(168 154 154 / 20%)",
       red_3: "rgba(219, 42, 42, 0.197)",

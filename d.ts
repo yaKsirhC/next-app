@@ -52,8 +52,8 @@ export interface nodeState {
   isLoadingNode: boolean;
   motherNode: motherNode;
   selectedNode: {
-    toCreate: folderNode;
-    toSelect: fileNode | folderNode;
+    toCreate: string;
+    toSelect: string;
   };
   createNode: createNode;
   contextMenu: {
@@ -71,12 +71,6 @@ export interface nodeState {
     has: boolean;
     message: string;
   };
-}
-
-export interface keyMap {
-  ctrl: boolean;
-  shift: boolean;
-  key: string;
 }
 
 export interface settingsState {
@@ -97,7 +91,7 @@ export interface clr_pallete {
   beige_2: string;
   beige_3: string;
   gray_2: string;
-  hover_clr: string;
+  active_clr: string;
   red_1: string;
   red_2: string;
   red_3: string;

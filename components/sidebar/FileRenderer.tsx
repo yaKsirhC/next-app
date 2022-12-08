@@ -26,7 +26,7 @@ export default function FileRenderer({ fileNode, higherIndex = 1 }: { fileNode: 
 
   const fileNameStyles: CSSProperties = {
     paddingLeft: `${higherIndex * 10}px`,
-    backgroundColor: selectedNode.toSelect.elementPath === fileNode.elementPath ? "var(--hover_clr)" : "",
+    backgroundColor: selectedNode.toSelect === fileNode.elementPath ? "var(--active_clr)" : "",
   };
 
   const fileNameEventListeners: HTMLAttributes<HTMLDivElement> = {
@@ -34,8 +34,8 @@ export default function FileRenderer({ fileNode, higherIndex = 1 }: { fileNode: 
     onClick: () => {
       dispatch(
         setSelectedNode({
-          toCreate: { ...precursorNode },
-          toSelect: fileNode,
+          toCreate: precursorNode.elementPath,
+          toSelect: fileNode.elementPath,
         })
       );
 

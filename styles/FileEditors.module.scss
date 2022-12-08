@@ -1,12 +1,13 @@
 .file_editor{
     background-color: var(--red_1);
+    min-width: 0;
 
     .tabs{
         display: flex;
         border-bottom: 1px solid var(--gray_2);
         .tab{
             cursor: pointer;
-            border-inline: 1px solid var(--gray_2);
+            border-right: 1px solid var(--gray_2);
             gap: 4px;
             display: flex;
             padding: 0px 10px;

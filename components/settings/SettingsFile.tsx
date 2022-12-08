@@ -19,6 +19,10 @@ export default function SettingsFile(){
             <div className={styles.font_settings}>
                 <FontSettings />
             </div>
+
+            <p className={styles.info}>
+                * Settings are automaticaly saved to server.
+            </p>
         </div>
     )
 }
